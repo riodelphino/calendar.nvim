@@ -50,7 +50,6 @@ function M.highlight_today(buf, year, month, grid)
       if tonumber(val) == today.day then
         local line = (row - 1) * 2 + 4
         local col_start = (col - 1) * 5 + 5
-        print(line, col_start)
         vim.api.nvim_buf_add_highlight(
           buf,
           -1,
