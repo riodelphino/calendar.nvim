@@ -5,13 +5,13 @@ local ns = vim.api.nvim_create_namespace('calendar.nvim')
 function M.render_lines(year, month, grid)
   local lines = {}
   table.insert(lines, string.format('              %04d-%02d', year, month))
-  table.insert(lines, '')
+  table.insert(lines, '                                 ')
   table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
-  table.insert(lines, '')
+  table.insert(lines, '                                 ')
 
   for _, week in ipairs(grid) do
     table.insert(lines, '   ' .. table.concat(week, ' '))
-    table.insert(lines, '')
+    table.insert(lines, '                                 ')
   end
 
   return lines
