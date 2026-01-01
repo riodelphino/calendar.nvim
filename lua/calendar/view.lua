@@ -31,6 +31,10 @@ function M.open(lines)
     style = 'minimal',
     border = 'rounded',
   })
+  local winhighlight =
+    'NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None'
+
+  vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = win })
 
   return buf, win
 end
