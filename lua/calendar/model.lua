@@ -15,7 +15,7 @@ function M.build_month_grid(year, month)
   local grid = {}
 
   for i = 1, 6 do
-    grid[i] = { "", "", "", "", "", "", "" }
+    grid[i] = { "  ", "  ", "  ", "  ", "  ", "  ", "  " }
   end
 
   local start_col = info.first_wday == 0 and 7 or info.first_wday
