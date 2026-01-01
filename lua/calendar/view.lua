@@ -5,6 +5,7 @@ function M.render_lines(year, month, grid)
   table.insert(lines, string.format('              %04d-%02d', year, month))
   table.insert(lines, '')
   table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
+  table.insert(lines, '')
 
   for _, week in ipairs(grid) do
     table.insert(lines, '   ' .. table.concat(week, ' '))
@@ -25,7 +26,7 @@ function M.open(lines)
     relative = 'editor',
     row = 3,
     col = 5,
-    width = 40,
+    width = 35,
     height = #lines,
     style = 'minimal',
     border = 'rounded',
@@ -43,15 +44,16 @@ function M.highlight_today(buf, year, month, grid)
   for row, week in ipairs(grid) do
     for col, val in ipairs(week) do
       if tonumber(val) == today.day then
-        local line = row + 1
-        local col_start = (col - 1) * 3 + 2
+        local line = (row - 1) * 2 + 4
+        local col_start = (col - 1) * 5 + 5
+        print(line, col_start)
         vim.api.nvim_buf_add_highlight(
           buf,
           -1,
           'Visual',
           line,
           col_start,
-          col_start + 2
+          col_start + 3
         )
       end
     end
