@@ -1,5 +1,9 @@
 local M = {}
 
+-- do not create new calendar buffer
+
+local buf = -1
+
 local model = require('calendar.model')
 
 local ns = vim.api.nvim_create_namespace('calendar.nvim')
@@ -60,7 +64,9 @@ end
 function M.open(year, month)
   local grid = model.build_month_grid(year, month)
   local lines = render_lines(year, month, grid)
-  local buf = vim.api.nvim_create_buf(false, true)
+  if not vim.api.nvim_buf_is_valid(buf) then
+    buf = vim.api.nvim_create_buf(false, true)
+  end
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
   vim.bo[buf].buftype = 'nofile'
