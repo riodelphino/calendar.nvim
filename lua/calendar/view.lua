@@ -1,6 +1,9 @@
 local M = {}
 
 local ns = vim.api.nvim_create_namespace('calendar.nvim')
+local ext = require('calendar.extensions')
+
+local dot = '•'
 
 function M.render_lines(year, month, grid)
   local lines = {}
@@ -10,7 +13,13 @@ function M.render_lines(year, month, grid)
   table.insert(lines, '                                 ')
 
   for _, week in ipairs(grid) do
-    table.insert(lines, '   ' .. table.concat(week, ' '))
+    table.insert(lines, '   ' .. table.concat(vim.tbl_map(function(day)
+      if ext.has_marks(year, month, tonumber(day)) then
+        return dot .. day
+      else
+        return ' ' .. day
+      end
+    end, week), ' '))
     table.insert(lines, '                                 ')
   end
 
