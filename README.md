@@ -33,7 +33,7 @@ require('calendar').setup({
 
 calendar.nvim supports extensions which can be used to mark specific date. for example:
 
-here is a simple extension to add zettelkasten.nvim support to calendar.nvim
+here is a simple extension to add [zettelkasten.nvim](https://github.com/wsdjeg/zettelkasten.nvim) support to calendar.nvim
 
 ```lua
 local zk_ext = {}
