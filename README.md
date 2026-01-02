@@ -14,7 +14,17 @@ A lightweight calendar plugin for neovim.
 
 ```lua
 return {
-    'wsdjeg/calendar.nvim'
+  'wsdjeg/calendar.nvim',
 }
 ```
 
+## Setup
+
+```lua
+require('calendar').setup({
+  keymap = {
+    next_month = 'L',
+    previous_month = 'H',
+  },
+})
+```

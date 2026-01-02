@@ -3,6 +3,9 @@ local M = {}
 -- do not create new calendar buffer
 
 local buf = -1
+local win = -1
+
+local calender = {}
 
 local model = require('calendar.model')
 
@@ -34,7 +37,7 @@ local function render_lines(year, month, grid)
 
   return lines
 end
-local function highlight_today(buf, year, month, grid)
+local function highlight_today(year, month, grid)
   local today = os.date('*t')
   if today.year ~= year or today.month ~= month then
     return
@@ -62,33 +65,62 @@ local function highlight_today(buf, year, month, grid)
 end
 
 function M.open(year, month)
+  calender.year = year
+  calender.month = month
+  local conf = require('calendar.config').get()
   local grid = model.build_month_grid(year, month)
   local lines = render_lines(year, month, grid)
   if not vim.api.nvim_buf_is_valid(buf) then
     buf = vim.api.nvim_create_buf(false, true)
+    vim.bo[buf].buftype = 'nofile'
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.previous_month, '', {
+      callback = M.previous_month,
+    })
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.next_month, '', {
+      callback = M.next_month,
+    })
   end
+  vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-
-  vim.bo[buf].buftype = 'nofile'
   vim.bo[buf].modifiable = false
 
-  local win = vim.api.nvim_open_win(buf, true, {
-    relative = 'editor',
-    row = 3,
-    col = 5,
-    width = 35,
-    height = #lines,
-    style = 'minimal',
-    border = 'rounded',
-  })
-  local winhighlight =
-    'NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None'
+  if not vim.api.nvim_win_is_valid(win) then
+    win = vim.api.nvim_open_win(buf, true, {
+      relative = 'editor',
+      row = 3,
+      col = 5,
+      width = 35,
+      height = #lines,
+      style = 'minimal',
+      border = 'rounded',
+    })
+    local winhighlight =
+      'NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None'
+    vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = win })
+  end
 
-  vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = win })
-
-  highlight_today(buf, year, month, grid)
+  highlight_today(year, month, grid)
 
   return buf, win
+end
+
+function M.previous_month()
+  if calender.month == 1 then
+    calender.month = 12
+    calender.year = calender.year - 1
+  else
+    calender.month = calender.month - 1
+  end
+  M.open(calender.year, calender.month)
+end
+function M.next_month()
+  if calender.month == 12 then
+    calender.month = 1
+    calender.year = calender.year + 1
+  else
+    calender.month = calender.month + 1
+  end
+  M.open(calender.year, calender.month)
 end
 
 return M
