@@ -28,3 +28,36 @@ require('calendar').setup({
   },
 })
 ```
+
+## Add custom extensions
+
+calendar.nvim supports extensions which can be used to mark specific date. for example:
+
+here is a simple extension to add zettelkasten.nvim support to calendar.nvim
+
+```lua
+local zk_ext = {}
+
+function zk_ext.get(year, month)
+  local notes = require('zettelkasten.browser').get_notes()
+  local marks = {}
+  for _, note in ipairs(notes) do
+    local t = vim.split(note.id, '-')
+    if tonumber(t[1]) == year and tonumber(t[2]) == month then
+      table.insert(
+        marks,
+        {
+          year = tonumber(t[1]),
+          month = tonumber(t[2]),
+          day = tonumber(t[3]),
+        }
+      )
+    end
+  end
+
+  return marks
+end
+
+require('calendar.extensions').register(zk_ext)
+```
+
