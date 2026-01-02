@@ -15,6 +15,7 @@ local ext = require('calendar.extensions')
 local dot = '•'
 
 local function render_lines(year, month, grid)
+  ext.on_change(year, month)
   local lines = {}
   table.insert(lines, string.format('              %04d-%02d', year, month))
   table.insert(lines, '                                 ')

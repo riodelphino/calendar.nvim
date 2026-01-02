@@ -1,5 +1,7 @@
 local M = {}
 
+local extensions = {}
+
 local marked_days = {}
 
 local function get_key(year, mouth, day)
@@ -19,6 +21,19 @@ end
 
 function M.mark(year, mouth, day)
   marked_days[get_key(year, mouth, day)] = true
+end
+
+function M.register(ext)
+  table.insert(extensions, ext)
+end
+
+function M.on_change(year, month)
+  for _, ext in ipairs(extensions) do
+    local marks = ext.get(year, month)
+    for _, mark in ipairs(marks) do
+      M.mark(mark.year, mark.month, mark.day)
+    end
+  end
 end
 
 return M
