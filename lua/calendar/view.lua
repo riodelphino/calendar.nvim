@@ -51,10 +51,17 @@ function M.highlight_today(buf, year, month, grid)
     for col, val in ipairs(week) do
       if tonumber(val) == today.day then
         local line = (row - 1) * 2 + 4
-        local col_start = (col - 1) * 5 + 5
+        local col_start, col_end
+        if today.day < 10 then
+          col_start = (col - 1) * 4 + 4
+          col_end = col_start + 3
+        else
+          col_start = (col - 1) * 4 + 3
+          col_end = col_start + 4
+        end
         vim.api.nvim_buf_set_extmark(buf, ns, line, col_start, {
           hl_group = 'Visual',
-        end_col = col_start + 3
+          end_col = col_end,
         })
       end
     end
