@@ -10,6 +10,16 @@ A lightweight calendar plugin for neovim.
 
 <img width="660" height="653" alt="image" src="https://github.com/user-attachments/assets/376a980a-dda6-4317-b0fc-76addfa62c19" />
 
+## Features
+
+- Monthly calendar view in Neovim
+- Vim-style keyboard navigation
+- Today highlighting and custom day highlights
+- Marked days support
+- Extensible architecture
+- Configurable setup and keymaps
+- Pure Lua, lightweight, no dependencies
+
 ## Installation
 
 ```lua
