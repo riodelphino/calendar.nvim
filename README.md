@@ -32,9 +32,14 @@ return {
 
 ```lua
 require('calendar').setup({
+  -- calendar.nvim support vim style keyboard navigation, hjkl.
   keymap = {
     next_month = 'L',
     previous_month = 'H',
+    next_day = 'l',
+    previous_day = 'h',
+    next_week = 'j',
+    previous_week = 'k',
   },
 })
 ```
