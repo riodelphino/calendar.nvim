@@ -5,6 +5,8 @@ local M = {}
 local buf = -1
 local win = -1
 
+local highlight_today_id = -1
+
 local calendar = {}
 
 local model = require('calendar.model')
@@ -17,7 +19,10 @@ local dot = '•'
 local function render_lines(year, month, grid)
   ext.on_change(year, month)
   local lines = {}
-  table.insert(lines, string.format('              %04d-%02d            ', year, month))
+  table.insert(
+    lines,
+    string.format('              %04d-%02d            ', year, month)
+  )
   table.insert(lines, '                                 ')
   table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
   table.insert(lines, '                                 ')
@@ -68,6 +73,7 @@ end
 function M.open(year, month)
   calendar.year = year
   calendar.month = month
+  calendar.day = 1
   local conf = require('calendar.config').get()
   calendar.grid = model.build_month_grid(year, month)
   calendar.days = calendar.grid.days
@@ -80,6 +86,12 @@ function M.open(year, month)
     })
     vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.next_month, '', {
       callback = M.next_month,
+    })
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.next_day, '', {
+      callback = M.next_day,
+    })
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.previous_day, '', {
+      callback = M.previous_day,
     })
   end
   vim.bo[buf].modifiable = true
@@ -132,6 +144,7 @@ function M.next_day()
     calendar.day = 1
     M.next_month()
   end
+  M.highlight_day(calendar.day)
 end
 
 function M.previous_day()
@@ -141,6 +154,7 @@ function M.previous_day()
     calendar.day = 1
     M.next_month()
   end
+  M.highlight_day(calendar.day)
 end
 
 function M.highlight_day(day)
@@ -156,10 +170,12 @@ function M.highlight_day(day)
           col_start = (col - 1) * 4 + 3
           col_end = col_start + 4
         end
-        vim.api.nvim_buf_set_extmark(buf, ns, line, col_start, {
-          hl_group = 'Visual',
-          end_col = col_end,
-        })
+        pcall(vim.api.nvim_buf_del_extmark, buf, ns, highlight_today_id)
+        highlight_today_id =
+          vim.api.nvim_buf_set_extmark(buf, ns, line, col_start, {
+            hl_group = 'Visual',
+            end_col = col_end,
+          })
       end
     end
   end

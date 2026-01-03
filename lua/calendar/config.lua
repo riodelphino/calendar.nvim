@@ -2,6 +2,8 @@ local default_config = {
   keymap = {
     next_month = 'L',
     previous_month = 'H',
+    next_day = 'l',
+    previous_day = 'h',
   },
 }
 
