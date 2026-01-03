@@ -117,6 +117,8 @@ function M.open(year, month)
     local winhighlight =
       'NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None'
     vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = win })
+    vim.api.nvim_set_option_value('sidescrolloff', 0, { win = win })
+    vim.api.nvim_set_option_value('scrolloff', 0, { win = win })
   end
 
   highlight_today(year, month, calendar.grid)
