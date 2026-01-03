@@ -7,7 +7,12 @@ function M.open()
   view.open(t.year, t.month)
 end
 
-function M.complete(lead, comline, cursorpos)
+function M.complete(lead, comline, cursorpos) end
+
+function M.setup(opt)
+  opt = opt or {}
+
+  require('calendar.config').setup(opt)
 end
 
 return M
