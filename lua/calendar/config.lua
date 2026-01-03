@@ -7,6 +7,7 @@ local default_config = {
     next_week = 'j',
     previous_week = 'k',
   },
+  mark_icon = '•',
 }
 
 return {

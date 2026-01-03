@@ -14,8 +14,6 @@ local model = require('calendar.model')
 local ns = vim.api.nvim_create_namespace('calendar.nvim')
 local ext = require('calendar.extensions')
 
-local dot = '•'
-
 local function render_lines(year, month, grid)
   ext.on_change(year, month)
   local lines = {}
@@ -26,6 +24,8 @@ local function render_lines(year, month, grid)
   table.insert(lines, '                                 ')
   table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
   table.insert(lines, '                                 ')
+
+  local dot = require('calendar.config').get().mark_icon
 
   for _, week in ipairs(grid) do
     table.insert(lines, '   ' .. table.concat(

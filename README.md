@@ -32,6 +32,7 @@ return {
 
 ```lua
 require('calendar').setup({
+  mark_icon = '•',
   -- calendar.nvim support vim style keyboard navigation, hjkl.
   keymap = {
     next_month = 'L',
