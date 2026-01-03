@@ -33,6 +33,8 @@ function M.build_month_grid(year, month)
     end
   end
 
+  grid.days = info.days
+
   return grid
 end
 
