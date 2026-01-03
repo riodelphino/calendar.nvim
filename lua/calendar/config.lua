@@ -4,6 +4,8 @@ local default_config = {
     previous_month = 'H',
     next_day = 'l',
     previous_day = 'h',
+    next_week = 'j',
+    previous_week = 'k',
   },
 }
 

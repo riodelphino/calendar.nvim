@@ -93,6 +93,12 @@ function M.open(year, month)
     vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.previous_day, '', {
       callback = M.previous_day,
     })
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.next_week, '', {
+      callback = M.next_week,
+    })
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.previous_week, '', {
+      callback = M.previous_week,
+    })
   end
   vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
@@ -153,6 +159,28 @@ function M.previous_day()
   else
     calendar.day = 1
     M.next_month()
+  end
+  M.highlight_day(calendar.day)
+end
+
+function M.next_week()
+  if calendar.day + 7 > calendar.days then
+    local day = calendar.day + 7 - calendar.days
+    M.next_month()
+    calendar.day = day
+  else
+    calendar.day = calendar.day + 7
+  end
+  M.highlight_day(calendar.day)
+end
+
+function M.previous_week()
+  if calendar.day <= 7 then
+    local day = 7 - calendar.day
+    M.previous_month()
+    calendar.day = calendar.days - day
+  else
+    calendar.day = calendar.day - 7
   end
   M.highlight_day(calendar.day)
 end
