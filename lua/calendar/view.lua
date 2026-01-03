@@ -62,7 +62,7 @@ local function highlight_today(year, month, grid)
           col_end = col_start + 4
         end
         vim.api.nvim_buf_set_extmark(buf, ns, line, col_start, {
-          hl_group = 'Visual',
+          hl_group = require('calendar.config').get().highlights.today,
           end_col = col_end,
         })
       end
@@ -203,7 +203,7 @@ function M.highlight_day(day)
         pcall(vim.api.nvim_buf_del_extmark, buf, ns, highlight_today_id)
         highlight_today_id =
           vim.api.nvim_buf_set_extmark(buf, ns, line, col_start, {
-            hl_group = 'Visual',
+            hl_group = require('calendar.config').get().highlights.current,
             end_col = col_end,
           })
       end

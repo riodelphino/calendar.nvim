@@ -42,6 +42,10 @@ require('calendar').setup({
     next_week = 'j',
     previous_week = 'k',
   },
+  highlights = {
+    current = 'Visual',
+    today = 'Todo',
+  },
 })
 ```
 

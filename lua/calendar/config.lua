@@ -8,6 +8,10 @@ local default_config = {
     previous_week = 'k',
   },
   mark_icon = '•',
+  highlights = {
+    current = 'Visual',
+    today = 'Todo',
+  },
 }
 
 return {
