@@ -4,7 +4,7 @@ local M = {}
 
 function M.open()
   local t = os.date('*t')
-  view.open(t.year, t.month)
+  view.open(t.year, t.month, t.day)
 end
 
 function M.complete(lead, comline, cursorpos) end
