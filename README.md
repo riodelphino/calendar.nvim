@@ -10,7 +10,7 @@ A lightweight calendar plugin for neovim.
 
 <img width="660" height="653" alt="image" src="https://github.com/user-attachments/assets/376a980a-dda6-4317-b0fc-76addfa62c19" />
 
-## Features
+## ✨ Features
 
 - Monthly calendar view in Neovim
 - Vim-style keyboard navigation
@@ -20,7 +20,7 @@ A lightweight calendar plugin for neovim.
 - Configurable setup and keymaps
 - Pure Lua, lightweight, no dependencies
 
-## Installation
+## 📦 Installation
 
 ```lua
 return {
@@ -28,7 +28,7 @@ return {
 }
 ```
 
-## Setup
+## 🔧 Configuration
 
 ```lua
 require('calendar').setup({
@@ -51,7 +51,7 @@ require('calendar').setup({
 })
 ```
 
-## Add custom extensions
+## 🧩 Custom extensions
 
 calendar.nvim supports extensions which can be used to mark specific date. for example:
 
@@ -83,3 +83,22 @@ end
 require('calendar.extensions').register(zk_ext)
 ```
 
+## 📣 Self-Promotion
+
+Like this plugin? Star the repository on
+GitHub.
+
+Love this plugin? Follow [me](https://wsdjeg.net/) on
+[GitHub](https://github.com/wsdjeg).
+
+## 💬 Feedback
+
+If you encounter any bugs or have suggestions, please file an issue in the [issue tracker](https://github.com/wsdjeg/calendar.nvim/issues)
+
+## 🙏 Credits
+
+- [calendar](https://github.com/itchyny/calendar.vim)
+
+## 📄 License
+
+Licensed under GPL-3.0.
