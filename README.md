@@ -46,6 +46,7 @@ require('calendar').setup({
   highlights = {
     current = 'Visual',
     today = 'Todo',
+    mark = 'Todo',
   },
 })
 ```
