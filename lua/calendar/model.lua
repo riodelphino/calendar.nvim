@@ -17,7 +17,7 @@ function M.build_month_grid(year, month)
   for i = 1, 6 do
     grid[i] = {}
     for c = 1, 7 do
-      grid[i][c] = '  '
+      grid[i][c] = '   '
     end
   end
 
@@ -25,7 +25,7 @@ function M.build_month_grid(year, month)
   local row, col = 1, start_col
 
   for day = 1, info.days do
-    grid[row][col] = string.format('%2d', day)
+    grid[row][col] = string.format('%3d', day)
     col = col + 1
     if col > 7 then
       col = 1

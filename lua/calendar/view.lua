@@ -15,7 +15,6 @@ local ns = vim.api.nvim_create_namespace('calendar.nvim')
 local ext = require('calendar.extensions')
 
 local function render_lines(year, month, grid)
-  ext.on_change(year, month)
   local lines = {}
   table.insert(
     lines,
@@ -28,16 +27,7 @@ local function render_lines(year, month, grid)
   local dot = require('calendar.config').get().mark_icon
 
   for _, week in ipairs(grid) do
-    table.insert(lines, '   ' .. table.concat(
-      vim.tbl_map(function(day)
-        if ext.has_marks(year, month, tonumber(day)) then
-          return dot .. day
-        else
-          return ' ' .. day
-        end
-      end, week),
-      ' '
-    ) .. '   ')
+    table.insert(lines, '   ' .. table.concat(week, ' ') .. '   ')
     table.insert(lines, '                                 ')
   end
 
@@ -65,6 +55,46 @@ local function highlight_today(year, month, grid)
           hl_group = require('calendar.config').get().highlights.today,
           end_col = col_end,
         })
+      end
+    end
+  end
+end
+
+local marks = {}
+local function set_mark(year, month, grid)
+  for _, id in ipairs(marks) do
+    pcall(vim.api.nvim_buf_del_extmark, buf, ns, id)
+  end
+  marks = {}
+  local t = os.date('*t')
+  local conf = require('calendar.config').get()
+  for row, week in ipairs(grid) do
+    for col, val in ipairs(week) do
+      if ext.has_marks(year, month, tonumber(val)) then
+        local line = (row - 1) * 2 + 4
+        local col_start, col_end
+        if tonumber(val) < 10 then
+          col_start = (col - 1) * 4 + 4
+        else
+          col_start = (col - 1) * 4 + 3
+        end
+        local virt_text_hl = { conf.highlights.mark }
+        if t.year == year and t.month == month and t.day == tonumber(val) then
+          table.insert(virt_text_hl, conf.highlights.today)
+        end
+        if tonumber(val) == calendar.day then
+          table.insert(virt_text_hl, conf.highlights.current)
+        end
+        local id = vim.api.nvim_buf_set_extmark(buf, ns, line, col_start, {
+          virt_text = {
+            {
+              conf.mark_icon,
+              virt_text_hl,
+            },
+          },
+          virt_text_pos = 'overlay',
+        })
+        table.insert(marks, id)
       end
     end
   end
@@ -126,6 +156,7 @@ function M.open(year, month, day)
 
   highlight_today(year, month, calendar.grid)
 
+  ext.on_change(year, month)
   M.highlight_day(calendar.day)
 
   return buf, win
@@ -163,11 +194,12 @@ end
 function M.previous_day()
   if calendar.day > 1 then
     calendar.day = calendar.day - 1
+    M.highlight_day(calendar.day)
   else
-    calendar.day = 1
-    M.next_month()
+    M.previous_month()
+    calendar.day = calendar.days
+    M.highlight_day(calendar.day)
   end
-  M.highlight_day(calendar.day)
 end
 
 function M.next_week()
@@ -222,6 +254,7 @@ function M.highlight_day(day)
       end
     end
   end
+  set_mark(calendar.year, calendar.month, calendar.grid)
 end
 
 return M

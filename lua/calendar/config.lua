@@ -12,6 +12,7 @@ local default_config = {
   highlights = {
     current = 'Visual',
     today = 'Todo',
+    mark = 'Todo'
   },
 }
 
