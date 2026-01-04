@@ -123,6 +123,8 @@ function M.open(year, month)
 
   highlight_today(year, month, calendar.grid)
 
+  M.highlight_day(calendar.day)
+
   return buf, win
 end
 
