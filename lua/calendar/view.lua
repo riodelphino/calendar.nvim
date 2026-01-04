@@ -24,8 +24,6 @@ local function render_lines(year, month, grid)
   table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
   table.insert(lines, '                                 ')
 
-  local dot = require('calendar.config').get().mark_icon
-
   for _, week in ipairs(grid) do
     table.insert(lines, '   ' .. table.concat(week, ' ') .. '   ')
     table.insert(lines, '                                 ')
