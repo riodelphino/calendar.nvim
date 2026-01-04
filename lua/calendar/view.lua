@@ -70,10 +70,10 @@ local function highlight_today(year, month, grid)
   end
 end
 
-function M.open(year, month)
+function M.open(year, month, day)
   calendar.year = year
   calendar.month = month
-  calendar.day = 1
+  calendar.day = day or 1
   local conf = require('calendar.config').get()
   calendar.grid = model.build_month_grid(year, month)
   calendar.days = calendar.grid.days
@@ -98,6 +98,9 @@ function M.open(year, month)
     })
     vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.previous_week, '', {
       callback = M.previous_week,
+    })
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.today, '', {
+      callback = M.today,
     })
   end
   vim.bo[buf].modifiable = true
@@ -176,6 +179,14 @@ function M.next_week()
     calendar.day = calendar.day + 7
   end
   M.highlight_day(calendar.day)
+end
+
+function M.today()
+  local t = os.date('*t')
+  calendar.year = t.year
+  calendar.month = t.month
+  calendar.day = t.day
+  M.open(t.year, t.month, t.day)
 end
 
 function M.previous_week()

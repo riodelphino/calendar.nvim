@@ -6,6 +6,7 @@ local default_config = {
     previous_day = 'h',
     next_week = 'j',
     previous_week = 'k',
+    today = 't',
   },
   mark_icon = '•',
   highlights = {
