@@ -130,6 +130,21 @@ function M.open(year, month, day)
     vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.today, '', {
       callback = M.today,
     })
+    vim.api.nvim_buf_set_keymap(buf, 'n', '<LeftMouse>', '', {
+      callback = function()
+        local pos = vim.fn.getmousepos()
+        if pos.winid == win then
+          vim.api.nvim_win_set_cursor(win, { pos.line, pos.column - 1 })
+          local line = vim.fn.line('.')
+          if line >= 4 then
+            local mouse_day = tonumber(vim.fn.expand('<cword>'))
+            if mouse_day then
+              M.highlight_day(mouse_day)
+            end
+          end
+        end
+      end,
+    })
   end
   vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
