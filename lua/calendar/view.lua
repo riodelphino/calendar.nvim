@@ -198,6 +198,14 @@ function M.open(year, month, day)
               M.highlight_day(mouse_day)
             end
           end
+        else
+          vim.api.nvim_set_current_win(pos.winid)
+          if pos.line > 0 then
+            vim.api.nvim_win_set_cursor(
+              pos.winid,
+              { pos.line, pos.column - 1 }
+            )
+          end
         end
       end,
     })
