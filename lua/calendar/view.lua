@@ -211,7 +211,7 @@ function M.open(year, month, day)
       relative = 'editor',
       row = 3,
       col = 5,
-      width = 35,
+      width = 34,
       height = #lines,
       style = 'minimal',
       border = 'rounded',
