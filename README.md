@@ -48,6 +48,7 @@ require('calendar').setup({
     current = 'Visual',
     today = 'Todo',
     mark = 'Todo',
+    adjacent_days = 'Comment'
   },
 })
 ```
