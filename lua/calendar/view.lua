@@ -37,9 +37,16 @@ local function highlight_today(year, month, grid)
     return
   end
 
+  local is_current_month = false
+
   for row, week in ipairs(grid) do
     for col, val in ipairs(week) do
-      if tonumber(val) == today.day then
+      if is_current_month and tonumber(val) == 1 then
+        is_current_month = false
+      elseif not is_current_month and tonumber(val) == 1 then
+        is_current_month = true
+      end
+      if is_current_month and tonumber(val) == today.day then
         local line = (row - 1) * 2 + 4
         local col_start, col_end
         if today.day < 10 then
@@ -53,6 +60,7 @@ local function highlight_today(year, month, grid)
           hl_group = require('calendar.config').get().highlights.today,
           end_col = col_end,
         })
+        break
       end
     end
   end
@@ -66,9 +74,15 @@ local function set_mark(year, month, grid)
   marks = {}
   local t = os.date('*t')
   local conf = require('calendar.config').get()
+  local is_current_month = false
   for row, week in ipairs(grid) do
     for col, val in ipairs(week) do
-      if ext.has_marks(year, month, tonumber(val)) then
+      if is_current_month and tonumber(val) == 1 then
+        is_current_month = false
+      elseif not is_current_month and tonumber(val) == 1 then
+        is_current_month = true
+      end
+      if is_current_month and ext.has_marks(year, month, tonumber(val)) then
         local line = (row - 1) * 2 + 4
         local col_start, col_end
         if tonumber(val) < 10 then
@@ -93,6 +107,40 @@ local function set_mark(year, month, grid)
           virt_text_pos = 'overlay',
         })
         table.insert(marks, id)
+      end
+    end
+  end
+end
+
+local adjacent_days_ids = {}
+local function highlight_adjacent_days()
+  for _, id in ipairs(adjacent_days_ids) do
+    pcall(vim.api.nvim_buf_del_extmark, buf, ns, id)
+  end
+  adjacent_days_ids = {}
+  local is_current_month = false
+  for row, week in ipairs(calendar.grid) do
+    for col, val in ipairs(week) do
+      if is_current_month and tonumber(val) == 1 then
+        is_current_month = false
+      elseif not is_current_month and tonumber(val) == 1 then
+        is_current_month = true
+      end
+      if not is_current_month then
+        local line = (row - 1) * 2 + 4
+        local col_start, col_end
+        if tonumber(val) < 10 then
+          col_start = (col - 1) * 4 + 4
+          col_end = col_start + 3
+        else
+          col_start = (col - 1) * 4 + 3
+          col_end = col_start + 4
+        end
+        local id = vim.api.nvim_buf_set_extmark(buf, ns, line, col_start, {
+          hl_group = require('calendar.config').get().highlights.adjacent_days,
+          end_col = col_end,
+        })
+        table.insert(adjacent_days_ids, id)
       end
     end
   end
@@ -139,6 +187,14 @@ function M.open(year, month, day)
           if line >= 4 then
             local mouse_day = tonumber(vim.fn.expand('<cword>'))
             if mouse_day then
+              if line == 5 and mouse_day > 7 then
+                -- is previous month
+                M.previous_month()
+              elseif line > 12 and mouse_day < 15 then
+                -- is next month
+                M.next_month()
+              end
+              calendar.day = mouse_day
               M.highlight_day(mouse_day)
             end
           end
@@ -246,9 +302,15 @@ function M.previous_week()
 end
 
 function M.highlight_day(day)
+  local is_current_month = false
   for row, week in ipairs(calendar.grid) do
     for col, val in ipairs(week) do
-      if tonumber(val) == day then
+      if is_current_month and tonumber(val) == 1 then
+        is_current_month = false
+      elseif not is_current_month and tonumber(val) == 1 then
+        is_current_month = true
+      end
+      if is_current_month and tonumber(val) == day then
         local line = (row - 1) * 2 + 4
         local col_start, col_end
         if day < 10 then
@@ -268,6 +330,9 @@ function M.highlight_day(day)
     end
   end
   set_mark(calendar.year, calendar.month, calendar.grid)
+  if require('calendar.config').get().show_adjacent_days then
+    highlight_adjacent_days()
+  end
 end
 
 return M

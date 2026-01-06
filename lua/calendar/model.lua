@@ -11,6 +11,7 @@ function M.month_info(year, month)
 end
 
 function M.build_month_grid(year, month)
+  local conf = require('calendar.config').get()
   local info = M.month_info(year, month)
   local grid = {}
 
@@ -24,12 +25,36 @@ function M.build_month_grid(year, month)
   local start_col = info.first_wday == 0 and 7 or info.first_wday
   local row, col = 1, start_col
 
+  if conf.show_adjacent_days and start_col > 1 then
+    local previous_month_info
+    if month == 1 then
+      previous_month_info = M.month_info(year - 1, 12)
+    else
+      previous_month_info = M.month_info(year, month - 1)
+    end
+    for i = 1, start_col - 1 do
+      grid[1][i] =
+        string.format('%3d', previous_month_info.days - start_col + i + 1)
+    end
+  end
+
   for day = 1, info.days do
     grid[row][col] = string.format('%3d', day)
     col = col + 1
     if col > 7 then
       col = 1
       row = row + 1
+    end
+  end
+
+  if conf.show_adjacent_days then
+    for i = 1, 42 - start_col + 1 - info.days do
+      grid[row][col] = string.format('%3d', i)
+      col = col + 1
+      if col > 7 then
+        col = 1
+        row = row + 1
+      end
     end
   end
 

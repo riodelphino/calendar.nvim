@@ -9,10 +9,12 @@ local default_config = {
     today = 't',
   },
   mark_icon = '•',
+  show_adjacent_days = true,
   highlights = {
     current = 'Visual',
     today = 'Todo',
-    mark = 'Todo'
+    mark = 'Todo',
+    adjacent_days = 'Comment'
   },
 }
 
