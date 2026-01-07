@@ -33,7 +33,8 @@ return {
 ```lua
 require('calendar').setup({
   mark_icon = '•',
-  locale = 'en-US',  -- en-US or zh-CN
+  -- locale currently affects UI language only.
+  locale = 'en-US', -- en-US or zh-CN
   show_adjacent_days = true,
   -- calendar.nvim support vim style keyboard navigation, hjkl.
   keymap = {
@@ -49,7 +50,7 @@ require('calendar').setup({
     current = 'Visual',
     today = 'Todo',
     mark = 'Todo',
-    adjacent_days = 'Comment'
+    adjacent_days = 'Comment',
   },
 })
 ```
