@@ -15,13 +15,44 @@ local ns = vim.api.nvim_create_namespace('calendar.nvim')
 local ext = require('calendar.extensions')
 
 local function render_lines(year, month, grid)
+  local locale = require('calendar.config').get().locale
   local lines = {}
-  table.insert(
-    lines,
-    string.format('              %04d-%02d            ', year, month)
-  )
+  if locale == 'en-US' then
+    local months = {
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    }
+
+    -- local months = { "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec" }
+
+    table.insert(
+      lines,
+      string.format('%17s %04d           ', months[month], year)
+    )
+  elseif locale == 'zh-CN' then
+    table.insert(
+      lines,
+      string.format('           %04d 年 %2d 月         ', year, month)
+    )
+  end
   table.insert(lines, '                                 ')
-  table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
+  if locale == 'en' then
+    table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
+  elseif locale == 'zh-CN' then
+    table.insert(lines, '    一  二  三  四  五  六  日   ')
+  else
+    table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
+  end
   table.insert(lines, '                                 ')
 
   for _, week in ipairs(grid) do

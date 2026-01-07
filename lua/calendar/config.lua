@@ -14,8 +14,9 @@ local default_config = {
     current = 'Visual',
     today = 'Todo',
     mark = 'Todo',
-    adjacent_days = 'Comment'
+    adjacent_days = 'Comment',
   },
+  locale = 'en-US',
 }
 
 return {

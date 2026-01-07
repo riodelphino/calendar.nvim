@@ -33,6 +33,7 @@ return {
 ```lua
 require('calendar').setup({
   mark_icon = '•',
+  locale = 'en-US',  -- en-US or zh-CN
   show_adjacent_days = true,
   -- calendar.nvim support vim style keyboard navigation, hjkl.
   keymap = {
