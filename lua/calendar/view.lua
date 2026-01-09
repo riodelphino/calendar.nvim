@@ -240,6 +240,15 @@ function M.open(year, month, day)
         end
       end,
     })
+    vim.api.nvim_buf_set_keymap(buf, 'n', '<Enter>', '', {
+      callback = function()
+        require('calendar.extensions').on_action(
+          calendar.year,
+          calendar.month,
+          calendar.day
+        )
+      end,
+    })
   end
   vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
@@ -372,6 +381,10 @@ function M.highlight_day(day)
   if require('calendar.config').get().show_adjacent_days then
     highlight_adjacent_days()
   end
+end
+
+function M.close()
+  vim.api.nvim_win_close(win, true)
 end
 
 return M

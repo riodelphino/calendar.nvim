@@ -10,6 +10,21 @@ A minimal calendar plugin for Neovim.
 
 <img width="660" height="653" alt="image" src="https://github.com/user-attachments/assets/64ec7e8f-d5aa-4265-974a-9f56f0214527" />
 
+<!-- vim-markdown-toc GFM -->
+
+- [✨ Features](#-features)
+- [📦 Installation](#-installation)
+- [🔧 Configuration](#-configuration)
+- [🧩 Custom extensions](#-custom-extensions)
+    - [register extension manually](#register-extension-manually)
+    - [automatically extensions](#automatically-extensions)
+- [📣 Self-Promotion](#-self-promotion)
+- [💬 Feedback](#-feedback)
+- [🙏 Credits](#-credits)
+- [📄 License](#-license)
+
+<!-- vim-markdown-toc -->
+
 ## ✨ Features
 
 - Monthly calendar view in Neovim
@@ -57,7 +72,11 @@ require('calendar').setup({
 
 ## 🧩 Custom extensions
 
-calendar.nvim supports extensions which can be used to mark specific date. for example:
+calendar.nvim supports extensions which can be used to mark specific date.
+
+### register extension manually
+
+for example:
 
 here is a simple extension to add [zettelkasten.nvim](https://github.com/wsdjeg/zettelkasten.nvim) support to calendar.nvim
 
@@ -84,8 +103,41 @@ function zk_ext.get(year, month)
   return marks
 end
 
-require('calendar.extensions').register(zk_ext)
+require('calendar.extensions').register('zettelkasten', zk_ext)
 ```
+
+### automatically extensions
+
+create `lua/calendar/extensions/zettelkasten.lua`
+
+```lua
+local extension = {}
+
+function extension.get(year, month)
+  local notes = require('zettelkasten.browser').get_notes()
+  local marks = {}
+  for _, note in ipairs(notes) do
+    local t = vim.split(note.id, '-')
+    if tonumber(t[1]) == year and tonumber(t[2]) == month then
+      table.insert(marks, {
+        year = tonumber(t[1]),
+        month = tonumber(t[2]),
+        day = tonumber(t[3]),
+      })
+    end
+  end
+
+  return marks
+end
+
+extension.actions = {
+  create_daily_note = function(year, month, day) end,
+  view_daily_notes = function(year, month, day) end,
+}
+
+return extension
+```
+
 
 ## 📣 Self-Promotion
 
