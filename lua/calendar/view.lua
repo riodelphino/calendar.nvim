@@ -39,7 +39,7 @@ local function render_lines(year, month, grid)
       lines,
       string.format('%17s %04d           ', months[month], year)
     )
-  elseif locale == 'zh-CN' then
+  elseif locale == 'zh-CN' or locale == 'ja-JP' then
     table.insert(
       lines,
       string.format('           %04d 年 %2d 月         ', year, month)
@@ -50,6 +50,8 @@ local function render_lines(year, month, grid)
     table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
   elseif locale == 'zh-CN' then
     table.insert(lines, '    一  二  三  四  五  六  日   ')
+  elseif locale == 'ja-JP' then
+    table.insert(lines, '    月  火  水  木  金  土  日   ')
   else
     table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
   end
