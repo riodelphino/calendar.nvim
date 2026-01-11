@@ -7,6 +7,7 @@ local default_config = {
     next_week = 'j',
     previous_week = 'k',
     today = 't',
+    close = 'q',
   },
   mark_icon = '•',
   show_adjacent_days = true,

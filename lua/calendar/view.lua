@@ -211,6 +211,9 @@ function M.open(year, month, day)
     vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.today, '', {
       callback = M.today,
     })
+    vim.api.nvim_buf_set_keymap(buf, 'n', conf.keymap.close, '', {
+      callback = M.close,
+    })
     vim.api.nvim_buf_set_keymap(buf, 'n', '<LeftMouse>', '', {
       callback = function()
         local pos = vim.fn.getmousepos()
