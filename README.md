@@ -49,7 +49,7 @@ return {
 require('calendar').setup({
   mark_icon = '•',
   -- locale currently affects UI language only.
-  locale = 'en-US', -- en-US or zh-CN or ja-JP
+  locale = 'en-US', -- en-US | de-DE | en-GB | es-ES | fr-FR | it-IT | ja-JP | ko-KR | zh-CN | zh-TW | ru-RU
   show_adjacent_days = true,
   -- calendar.nvim support vim style keyboard navigation, hjkl.
   keymap = {
@@ -66,6 +66,28 @@ require('calendar').setup({
     today = 'Todo',
     mark = 'Todo',
     adjacent_days = 'Comment',
+  },
+  locales = {} -- See `## Locales`
+})
+```
+
+### locales
+
+`locales` config is extendable.
+
+(e.g. Add `my-LC` locale based on `en-US`)
+```lua
+require('calendar').setup({
+  locale = 'my-LC',
+  locales = {
+    ['my-LC'] = {
+       -- stylua: ignore
+       months = { 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' },
+       weekdays = { 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' },
+       year_month = function(year, month, months)
+         return string.format('%s %d', months[month], year)
+       end,
+     },
   },
 })
 ```

@@ -14,47 +14,68 @@ local model = require('calendar.model')
 local ns = vim.api.nvim_create_namespace('calendar.nvim')
 local ext = require('calendar.extensions')
 
+---@param str string
+---@param width number
+---@param align? 'left'|'center'|'right' default: 'left'
+---@param fillchar? string default: ' '）
+---@return string
+local function align_str(str, width, align, fillchar)
+  align = align or 'left'
+  fillchar = fillchar or ' '
+
+  local str_width = vim.fn.strdisplaywidth(str)
+
+  if str_width >= width then
+    return str
+  end
+
+  local padding = width - str_width
+
+  if align == 'left' then
+    return str .. string.rep(fillchar, padding)
+  elseif align == 'right' then
+    return string.rep(fillchar, padding) .. str
+  elseif align == 'center' then
+    local left_pad = math.floor(padding / 2)
+    local right_pad = padding - left_pad
+    return string.rep(fillchar, left_pad)
+      .. str
+      .. string.rep(fillchar, right_pad)
+  end
+
+  return str
+end
+
+local function center(str, width)
+  return align_str(str, width, 'center', ' ')
+end
+
+local function right(str, width)
+  return align_str(str, width, 'right', ' ')
+end
+
 local function render_lines(year, month, grid)
   local locale = require('calendar.config').get().locale
+  local locales = require('calendar.config').get().locales
   local lines = {}
-  if locale == 'en-US' then
-    local months = {
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    }
+  local CALENDAR_WIDTH, WEEKDAY_WIDTH = 33, 3
 
-    -- local months = { "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec" }
+  local months = locales[locale].months
+  local year_month = locales[locale].year_month(year, month, months)
+  table.insert(lines, center(year_month, CALENDAR_WIDTH))
 
-    table.insert(
-      lines,
-      string.format('%17s %04d           ', months[month], year)
-    )
-  elseif locale == 'zh-CN' or locale == 'ja-JP' then
-    table.insert(
-      lines,
-      string.format('           %04d 年 %2d 月         ', year, month)
-    )
-  end
   table.insert(lines, '                                 ')
-  if locale == 'en' then
-    table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
-  elseif locale == 'zh-CN' then
-    table.insert(lines, '    一  二  三  四  五  六  日   ')
-  elseif locale == 'ja-JP' then
-    table.insert(lines, '    月  火  水  木  金  土  日   ')
-  else
-    table.insert(lines, '   Mon Tue Wed Thu Fri Sat Sun   ')
+
+  local pad_weekdays = function()
+    local weekdays = {}
+    for _, weekday in ipairs(locales[locale].weekdays) do
+      table.insert(weekdays, right(weekday, WEEKDAY_WIDTH))
+    end
+    return weekdays
   end
+  local pad_weekdays_str = table.concat(pad_weekdays(), ' ')
+  table.insert(lines, center(pad_weekdays_str, CALENDAR_WIDTH))
+
   table.insert(lines, '                                 ')
 
   for _, week in ipairs(grid) do

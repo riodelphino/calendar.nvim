@@ -17,6 +17,7 @@ local default_config = {
     adjacent_days = 'Comment',
   },
   locale = 'en-US',
+  locales = require('calendar.locales'),
 }
 
 return {
