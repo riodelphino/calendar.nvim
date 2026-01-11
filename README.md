@@ -49,7 +49,7 @@ return {
 require('calendar').setup({
   mark_icon = '•',
   -- locale currently affects UI language only.
-  locale = 'en-US', -- en-US or zh-CN
+  locale = 'en-US', -- en-US or zh-CN or ja-JP
   show_adjacent_days = true,
   -- calendar.nvim support vim style keyboard navigation, hjkl.
   keymap = {
